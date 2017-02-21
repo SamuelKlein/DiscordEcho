@@ -16,6 +16,5 @@ settings.json
 *.ipr
 *.iws
 
-/gradle/wrapper
 /.gradle
 /build
