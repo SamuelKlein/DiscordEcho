@@ -15,3 +15,6 @@ settings.json
 *.iml
 *.ipr
 *.iws
+
+gradle/wrapper
+.gradle
