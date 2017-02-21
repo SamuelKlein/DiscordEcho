@@ -33,44 +33,34 @@ import java.util.List;
 
 import static java.lang.Thread.sleep;
 
-public class DiscordEcho
-{
+public class DiscordEcho {
     public static HashMap<String, ServerSettings> serverSettings = new HashMap<>();
 
-    public static void main(String[] args)
-    {
-        try
-        {
-            FileReader fr = new FileReader("shark_secret");
-            BufferedReader br = new BufferedReader(fr);
-            String secret = br.readLine();
+    public static void main(String[] args) {
+        try {
+            // FileReader fr = new FileReader("shark_secret");
+            // BufferedReader br = new BufferedReader(fr);
+            String secret = "MjgxMDU3MzA1ODIxMzE1MDcy.C4ZdpA.l6seLQv45e5mf1TZqhD9vw70gYA";
 
             JDA api = new JDABuilder(AccountType.BOT)
                     .setToken(secret)
                     .addListener(new EventListener())
                     .buildBlocking();
-    }
-        catch (LoginException e)
-        {
+        } catch (LoginException e) {
             //If anything goes wrong in terms of authentication, this is the exception that will represent it
             e.printStackTrace();
-        }
-        catch (InterruptedException e)
-        {
+        } catch (InterruptedException e) {
             //Due to the fact that buildBlocking is a blocking method, one which waits until JDA is fully loaded,
             // the waiting can be interrupted. This is the exception that would fire in that situation.
             //As a note: in this extremely simplified example this will never occur. In fact, this will never occur unless
             // you use buildBlocking in a thread that has the possibility of being interrupted (async thread usage and interrupts)
             e.printStackTrace();
-        }
-        catch (RateLimitedException e)
-        {
+        } catch (RateLimitedException e) {
             //The login process is one which can be ratelimited. If you attempt to login in multiple times, in rapid succession
             // (multiple times a second), you would hit the ratelimit, and would see this exception.
             //As a note: It is highly unlikely that you will ever see the exception here due to how infrequent login is.
             e.printStackTrace();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -88,7 +78,6 @@ public class DiscordEcho
         CommandHandler.commands.put("echo", new EchoCommand());
 
     }
-
 
 
     //UTILITY FUNCTIONS
@@ -112,8 +101,8 @@ public class DiscordEcho
         if (vc == null) return 0;
 
         int i = 0;
-        for (Member m : vc.getMembers()){
-            if(!m.getUser().isBot()) i++;
+        for (Member m : vc.getMembers()) {
+            if (!m.getUser().isBot()) i++;
         }
         return i;
     }
@@ -129,7 +118,7 @@ public class DiscordEcho
     public static void writeToFile(Guild guild, int time, TextChannel tc) {
         if (tc == null)
             tc = guild.getTextChannelById(serverSettings.get(guild.getId()).defaultTextChannel);
-        
+
         AudioReceiveListener ah = (AudioReceiveListener) guild.getAudioManager().getReceiveHandler();
         if (ah == null) {
             DiscordEcho.sendMessage(tc, "I wasn't recording!");
@@ -138,11 +127,8 @@ public class DiscordEcho
 
         File dest;
         try {
-
-            if (new File("/var/www/html/").exists())
-                dest = new File("/var/www/html/" + getPJSaltString() + ".mp3");
-            else
-                dest = new File("recordings/" + getPJSaltString() + ".mp3");
+            new File("/home/samuel/recordings").mkdir();
+            dest = new File("/home/samuel/recordings/" + getPJSaltString() + ".mp3");
 
             byte[] voiceData;
             ah.canReceive = false;
@@ -162,31 +148,37 @@ public class DiscordEcho
             System.out.format("Saving audio file '%s' from %s on %s of size %f MB\n",
                     dest.getName(), guild.getAudioManager().getConnectedChannel().getName(), guild.getName(), (double) dest.length() / 1024 / 1024);
 
-            if (dest.length() / 1024 / 1024 < 8) {
-                final TextChannel channel = tc;
-                tc.sendFile(dest, null).queue(null, (Throwable) -> {
-                    channel.sendMessage("I don't have permissions to send files here!").queue();
-                });
-
-                new Thread(() -> {
-                    try { sleep(1000 * 20); } catch (Exception ex) {}    //20 second life for files set to discord (no need to save)
-
-                    dest.delete();
-                    System.out.println("\tDeleting file " + dest.getName() + "...");
-
-                }).start();
-
-            } else {
-                DiscordEcho.sendMessage(tc, "http://com.DiscordEcho.DiscordEcho.com/" + dest.getName());
-
-                new Thread(() -> {
-                    try { sleep(1000 * 60 * 60); } catch (Exception ex) {}    //1 hour life for files stored on web server
-
-                    dest.delete();
-                    System.out.println("\tDeleting file " + dest.getName() + "...");
-
-                }).start();
-            }
+//            if (dest.length() / 1024 / 1024 < 8) {
+//                final TextChannel channel = tc;
+//                tc.sendFile(dest, null).queue(null, (Throwable) -> {
+//                    channel.sendMessage("I don't have permissions to send files here!").queue();
+//                });
+//
+//                new Thread(() -> {
+//                    try {
+//                        sleep(1000 * 20);
+//                    } catch (Exception ex) {
+//                    }    //20 second life for files set to discord (no need to save)
+//
+//                    dest.delete();
+//                    System.out.println("\tDeleting file " + dest.getName() + "...");
+//
+//                }).start();
+//
+//            } else {
+//                DiscordEcho.sendMessage(tc, "http://com.DiscordEcho.DiscordEcho.com/" + dest.getName());
+//
+//                new Thread(() -> {
+//                    try {
+//                        sleep(1000 * 60 * 60);
+//                    } catch (Exception ex) {
+//                    }    //1 hour life for files stored on web server
+//
+//                    dest.delete();
+//                    System.out.println("\tDeleting file " + dest.getName() + "...");
+//
+//                }).start();
+//            }
 
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -210,12 +202,13 @@ public class DiscordEcho
             fw.flush();
             fw.close();
 
-        } catch (Exception ex) {}
+        } catch (Exception ex) {
+        }
     }
 
     public static void alert(VoiceChannel vc) {
         for (Member m : vc.getMembers()) {
-            if(m.getUser() == vc.getJDA().getSelfUser()) continue;
+            if (m.getUser() == vc.getJDA().getSelfUser()) continue;
             if (!serverSettings.get(vc.getGuild().getId()).alertBlackList.contains(m.getUser().getId()) && !m.getUser().isBot()) {
 
                 EmbedBuilder embed = new EmbedBuilder();
@@ -305,6 +298,7 @@ public class DiscordEcho
         vc.getGuild().getAudioManager().setReceivingHandler(new AudioReceiveListener(volume));
 
     }
+
     public static void leaveVoiceChannel(VoiceChannel vc) {
         System.out.format("Leaving '%s' voice channel in %s\n", vc.getGuild(), vc.getGuild().getName());
 

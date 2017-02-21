@@ -193,20 +193,20 @@ public class EventListener extends ListenerAdapter {
         try {
             System.out.format("ONLINE: Connected to %s guilds!\n", e.getJDA().getGuilds().size(), e.getJDA().getVoiceChannels().size());
 
-            Gson gson = new Gson();
-
-            FileReader fileReader = new FileReader("settings.json");
-            BufferedReader buffered = new BufferedReader(fileReader);
-
-            Type type = new TypeToken<HashMap<String, ServerSettings>>(){}.getType();
-
-            DiscordEcho.serverSettings = gson.fromJson(fileReader, type);
+//            Gson gson = new Gson();
+//
+//            FileReader fileReader = new FileReader("settings.json");
+//            BufferedReader buffered = new BufferedReader(fileReader);
+//
+//            Type type = new TypeToken<HashMap<String, ServerSettings>>(){}.getType();
+//
+//            DiscordEcho.serverSettings = gson.fromJson(fileReader, type);
 
             if (DiscordEcho.serverSettings == null)
                 DiscordEcho.serverSettings = new HashMap<>();
 
-            buffered.close();
-            fileReader.close();
+//            buffered.close();
+//            fileReader.close();
 
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -220,22 +220,22 @@ public class EventListener extends ListenerAdapter {
             }
         }
 
-        File dir = new File("/var/www/html/");
+        File dir = new File("/tmp/");
         if (!dir.exists())
             dir = new File("recordings/");
 
-        for (File f : dir.listFiles()) {
-            if (f.getName().substring(f.getName().lastIndexOf('.'), f.getName().length()).equals(".mp3")) {
-                new Thread (() -> {
-
-                    try { sleep(1000 * 60 * 30); } catch (Exception ex){}
-
-                    f.delete();
-                    System.out.println("\tDeleting file " + f.getName() + "...");
-
-                }).start();
-            }
-        }
+//        for (File f : dir.listFiles()) {
+//            if (f.getName().substring(f.getName().lastIndexOf('.'), f.getName().length()).equals(".mp3")) {
+//                new Thread (() -> {
+//
+//                    try { sleep(1000 * 60 * 30); } catch (Exception ex){}
+//
+//                    f.delete();
+//                    System.out.println("\tDeleting file " + f.getName() + "...");
+//
+//                }).start();
+//            }
+//        }
 
         //check for servers to join
         for (Guild g : e.getJDA().getGuilds()) {

@@ -46,9 +46,9 @@ public class AudioReceiveListener implements AudioReceiveHandler
             new Thread(() -> {
 
                 if (uncompIndex < uncompVoiceData.length / 2)  //first half
-                    addCompVoiceData(DiscordEcho.encodePcmToMp3(Arrays.copyOfRange(uncompVoiceData, 0, uncompVoiceData.length / 2)));
+                    addCompVoiceData((Arrays.copyOfRange(uncompVoiceData, 0, uncompVoiceData.length / 2)));
                 else
-                    addCompVoiceData(DiscordEcho.encodePcmToMp3(Arrays.copyOfRange(uncompVoiceData, uncompVoiceData.length / 2, uncompVoiceData.length )));
+                    addCompVoiceData((Arrays.copyOfRange(uncompVoiceData, uncompVoiceData.length / 2, uncompVoiceData.length )));
 
             }).start();
 
