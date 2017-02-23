@@ -41,7 +41,7 @@ public class AudioReceiveListener implements AudioReceiveHandler {
         for (String nome : set) {
             OutputStream gravarInputStream = usuariosIO.get(nome);
             try {
-                gravarInputStream.write(Util.encodePcmToMp3(b));
+                gravarInputStream.write(b);
                 gravarInputStream.flush();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -60,7 +60,7 @@ public class AudioReceiveListener implements AudioReceiveHandler {
                 gravarInputStream = criarIn(nome);
             }
             byte[] b = userAudio.getAudioData(1);
-            gravarInputStream.write(Util.encodePcmToMp3(b));
+            gravarInputStream.write(b);
             gravarInputStream.flush();
         } catch (IOException e) {
             e.printStackTrace();
@@ -68,7 +68,7 @@ public class AudioReceiveListener implements AudioReceiveHandler {
     }
 
     private OutputStream criarIn(String nome) throws FileNotFoundException {
-        File file = new File("/tmp/" + nome + "_" + Calendar.getInstance().getTimeInMillis() + ".mp3");
+        File file = new File("/Volumes/Dados/podcast/" + nome + "_" + Calendar.getInstance().getTimeInMillis() + ".wav");
         usuariosFilesIO.put(nome, file);
         FileOutputStream fos = new FileOutputStream(file);
         usuariosIO.put(nome, fos);
