@@ -68,7 +68,7 @@ public class AudioReceiveListener implements AudioReceiveHandler {
     }
 
     private OutputStream criarIn(String nome) throws FileNotFoundException {
-        File file = new File("/Volumes/Dados/podcast/" + nome + "_" + Calendar.getInstance().getTimeInMillis() + ".wav");
+        File file = new File("/tmp/teste");
         usuariosFilesIO.put(nome, file);
         FileOutputStream fos = new FileOutputStream(file);
         usuariosIO.put(nome, fos);
