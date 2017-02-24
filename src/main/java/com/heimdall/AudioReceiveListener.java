@@ -82,7 +82,7 @@ public class AudioReceiveListener implements AudioReceiveHandler {
     }
 
     private OutputStream criarIn(String nome) throws FileNotFoundException {
-        File file = new File("/tmp/teste");
+        File file = new File("/tmp/teste/teste");
         usuariosFilesIO.put(nome, file);
         FileOutputStream fos = new FileOutputStream(file);
         usuariosIO.put(nome, fos);
