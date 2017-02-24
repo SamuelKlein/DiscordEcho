@@ -28,43 +28,57 @@ public class AudioReceiveListener implements AudioReceiveHandler {
 
     @Override
     public void handleCombinedAudio(CombinedAudio combinedAudio) {
-        Set<String> usuarios = new HashSet<>();
-        combinedAudio.getUsers().forEach(user -> {
-            usuarios.add(user.getName());
-        });
-        Set<String> set = usuariosFilesIO.keySet().stream().filter((v)-> {
-            return !usuarios.contains(v);
-        }).collect(Collectors.toSet());
-        int quantidade = combinedAudio.getAudioData(1).length;
 
-        byte[] b = new byte[quantidade];
-        for (String nome : set) {
-            OutputStream gravarInputStream = usuariosIO.get(nome);
-            try {
-                gravarInputStream.write(b);
-                gravarInputStream.flush();
-            } catch (IOException e) {
-                e.printStackTrace();
+        try {
+            OutputStream gravarInputStream = null;
+            if (usuariosIO.containsKey("Teste")) {
+                gravarInputStream = usuariosIO.get("Teste");
+            } else {
+                gravarInputStream = criarIn("Teste");
             }
+            gravarInputStream.write(combinedAudio.getAudioData(1));
+            gravarInputStream.flush();
+        } catch (Exception e) {
+
         }
+
+//        Set<String> usuarios = new HashSet<>();
+//        combinedAudio.getUsers().forEach(user -> {
+//            usuarios.add(user.getName());
+//        });
+//        Set<String> set = usuariosFilesIO.keySet().stream().filter((v)-> {
+//            return !usuarios.contains(v);
+//        }).collect(Collectors.toSet());
+//        int quantidade = combinedAudio.getAudioData(1).length;
+//
+//        byte[] b = new byte[quantidade];
+//        for (String nome : set) {
+//            OutputStream gravarInputStream = usuariosIO.get(nome);
+//            try {
+//                gravarInputStream.write(b);
+//                gravarInputStream.flush();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
     }
 
     @Override
     public void handleUserAudio(UserAudio userAudio) {
-        String nome = userAudio.getUser().getName();
-        try {
-            OutputStream gravarInputStream = null;
-            if (usuariosIO.containsKey(nome)) {
-                gravarInputStream = usuariosIO.get(nome);
-            } else {
-                gravarInputStream = criarIn(nome);
-            }
-            byte[] b = userAudio.getAudioData(1);
-            gravarInputStream.write(b);
-            gravarInputStream.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        String nome = userAudio.getUser().getName();
+//        try {
+//            OutputStream gravarInputStream = null;
+//            if (usuariosIO.containsKey(nome)) {
+//                gravarInputStream = usuariosIO.get(nome);
+//            } else {
+//                gravarInputStream = criarIn(nome);
+//            }
+//            byte[] b = userAudio.getAudioData(1);
+//            gravarInputStream.write(b);
+//            gravarInputStream.flush();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
     private OutputStream criarIn(String nome) throws FileNotFoundException {
