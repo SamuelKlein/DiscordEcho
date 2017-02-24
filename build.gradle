@@ -35,3 +35,11 @@ dependencies {
     testCompile 'junit:junit:4.12'
 }
 
+task runApp(type: JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+
+    main = 'com.heimdall.Main'
+
+    // arguments to pass to the application
+     args 'appArg1'
+}
