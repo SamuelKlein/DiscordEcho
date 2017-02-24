@@ -39,7 +39,7 @@ public class AudioReceiveListener implements AudioReceiveHandler {
             gravarInputStream.write(combinedAudio.getAudioData(1));
             gravarInputStream.flush();
         } catch (Exception e) {
-
+            System.out.println(e.getMessage());
         }
 
 //        Set<String> usuarios = new HashSet<>();
